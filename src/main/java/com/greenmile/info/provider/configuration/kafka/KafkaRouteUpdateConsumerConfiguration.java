@@ -29,20 +29,20 @@ public class KafkaRouteUpdateConsumerConfiguration {
 
     @Autowired
     @Value("${kafka.config.groupid.route.update}")
-    private String groupId;
+    private String routeUpdateGroupId;
 
     @Bean
-    public ConsumerFactory<String, RouteUpdate> coordinateConsumerFactory() {
+    public ConsumerFactory<String, RouteUpdate> routeUpdateConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddresses);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(RouteUpdate.class));
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, routeUpdateGroupId);
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<RouteUpdate>());
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, RouteUpdate> coordinateListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, RouteUpdate> routeUpdateListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, RouteUpdate> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(coordinateConsumerFactory());
+        factory.setConsumerFactory(routeUpdateConsumerFactory());
         return factory;
     }
 

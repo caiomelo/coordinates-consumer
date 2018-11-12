@@ -12,13 +12,9 @@ import java.util.UUID;
 public class RouteInfo implements Serializable {
 
     private String id;
-    private RouteStatus status;
-    private PlannedStop mostTimeConsuming;
+    private RouteStatus status = RouteStatus.PENDING;
+    private PlannedStop longest;
     private List<PlannedStop> executedStops;
-
-    public RouteInfo() {
-        id = UUID.randomUUID().toString();
-    }
 
     public String getId() {
         return id;
@@ -36,12 +32,12 @@ public class RouteInfo implements Serializable {
         this.status = status;
     }
 
-    public PlannedStop getMostTimeConsuming() {
-        return mostTimeConsuming;
+    public PlannedStop getLongest() {
+        return longest;
     }
 
-    public void setMostTimeConsuming(PlannedStop mostTimeConsuming) {
-        this.mostTimeConsuming = mostTimeConsuming;
+    public void setLongest(PlannedStop longest) {
+        this.longest = longest;
     }
 
     public List<PlannedStop> getExecutedStops() {

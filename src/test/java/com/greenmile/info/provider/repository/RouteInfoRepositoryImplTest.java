@@ -46,7 +46,7 @@ public class RouteInfoRepositoryImplTest {
         assertEquals(info.getId(), foundInfo.getId());
         assertEquals(info.getStatus(), foundInfo.getStatus());
         assertEquals(info.getExecutedStops().size(), foundInfo.getExecutedStops().size());
-        assertEquals(info.getMostTimeConsuming().getDescription(), foundInfo.getMostTimeConsuming().getDescription());
+        assertEquals(info.getLongest().getDescription(), foundInfo.getLongest().getDescription());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class RouteInfoRepositoryImplTest {
         plannedStop3.setDeliveryRadius(100);
         RouteInfo info = new RouteInfo();
         info.setStatus(RouteStatus.IN_PROGRESS);
-        info.setMostTimeConsuming(plannedStop2);
+        info.setLongest(plannedStop2);
         info.getExecutedStops().add(plannedStop1);
         info.getExecutedStops().add(plannedStop2);
         info.getExecutedStops().add(plannedStop3);

@@ -1,6 +1,7 @@
 package com.greenmile.info.provider.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -9,12 +10,11 @@ import java.io.Serializable;
 public class PlannedStop implements Serializable {
 
     private double latitude;
-
     private double longitude;
-
     private String description;
-
     private int deliveryRadius;
+    private Date startedDate;
+    private Date finishedDate;
 
     public double getLatitude() {
         return latitude;
@@ -46,6 +46,22 @@ public class PlannedStop implements Serializable {
 
     public void setDeliveryRadius(int deliveryRadius) {
         this.deliveryRadius = deliveryRadius;
+    }
+
+    public Date getStartedDate() {
+        return startedDate;
+    }
+
+    public void setStartedDate(Date startedDate) {
+        this.startedDate = startedDate;
+    }
+
+    public Date getFinishedDate() {
+        return finishedDate;
+    }
+
+    public void setFinishedDate(Date finishedDate) {
+        this.finishedDate = finishedDate;
     }
 
 }
