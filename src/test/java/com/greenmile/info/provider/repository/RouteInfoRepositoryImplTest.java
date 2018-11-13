@@ -1,40 +1,51 @@
 package com.greenmile.info.provider.repository;
 
+import com.greenmile.info.provider.configuration.TestRedisConfiguration;
 import com.greenmile.info.provider.model.PlannedStop;
 import com.greenmile.info.provider.model.RouteInfo;
 import com.greenmile.info.provider.model.RouteStatus;
 import java.util.List;
 import java.util.UUID;
-import javax.annotation.Resource;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 
 /**
  *
  * @author caioalbmelo
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = {TestRedisConfiguration.class})
 public class RouteInfoRepositoryImplTest {
 
-    @Resource(name = "routeInfoRedisTemplate")
     private RedisTemplate template;
 
+    private RouteInfoRepositoryImpl repository;
+
     @Autowired
-    private RouteInfoRepository repository;
+    private LettuceConnectionFactory connFactory;
 
     @Before
     public void setUp() {
-        template.delete(RouteInfoRepository.ROUTES_STATUSES_KEY);
-        template.delete(RouteInfoRepository.ROUTES_STOPS_KEY);
-        template.delete(RouteInfoRepository.ROUTES_LONGEST_STOP_KEY);
+        template = new RedisTemplate();
+        template.setConnectionFactory(connFactory);
+        template.afterPropertiesSet();
+
+        repository = new RouteInfoRepositoryImpl();
+        repository.setTemplate(template);
+    }
+
+    @After
+    public void tearDown() {
+        connFactory.getConnection().flushAll();
     }
 
     @Test
@@ -152,7 +163,7 @@ public class RouteInfoRepositoryImplTest {
         plannedStop3.setLongitude(38.471691);
         plannedStop3.setDescription("Shopping RioMar");
         plannedStop3.setDeliveryRadius(100);
-        
+
         RouteInfo info = new RouteInfo();
         info.setId(UUID.randomUUID().toString());
         info.setStatus(RouteStatus.IN_PROGRESS);
