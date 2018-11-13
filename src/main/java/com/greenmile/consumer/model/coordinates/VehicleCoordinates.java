@@ -1,4 +1,4 @@
-package com.greenmile.consumer.model.coordinate;
+package com.greenmile.consumer.model.coordinates;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
@@ -7,7 +7,7 @@ import java.util.Date;
  *
  * @author caioalbmelo
  */
-public class VehicleCoordinate {
+public class VehicleCoordinates {
 
     private double latitude;
 
