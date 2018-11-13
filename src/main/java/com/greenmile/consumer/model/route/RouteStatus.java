@@ -1,4 +1,4 @@
-package com.greenmile.consumer.model;
+package com.greenmile.consumer.model.route;
 
 /**
  *

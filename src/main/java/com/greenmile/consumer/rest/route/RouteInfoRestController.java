@@ -1,6 +1,6 @@
 package com.greenmile.consumer.rest.route;
 
-import com.greenmile.consumer.model.RouteInfo;
+import com.greenmile.consumer.model.route.RouteInfo;
 import com.greenmile.consumer.service.route.RouteInfoService;
 import java.util.HashMap;
 import java.util.List;

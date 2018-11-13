@@ -1,9 +1,9 @@
 package com.greenmile.consumer.repository.route;
 
 import com.greenmile.consumer.configuration.TestRedisConfiguration;
-import com.greenmile.consumer.model.PlannedStop;
-import com.greenmile.consumer.model.RouteInfo;
-import com.greenmile.consumer.model.RouteStatus;
+import com.greenmile.consumer.model.route.PlannedStop;
+import com.greenmile.consumer.model.route.RouteInfo;
+import com.greenmile.consumer.model.route.RouteStatus;
 import java.util.List;
 import java.util.UUID;
 import org.junit.After;

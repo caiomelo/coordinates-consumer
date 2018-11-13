@@ -1,6 +1,6 @@
 package com.greenmile.consumer.service.route;
 
-import com.greenmile.consumer.model.RouteInfo;
+import com.greenmile.consumer.model.route.RouteInfo;
 import java.util.List;
 
 /**

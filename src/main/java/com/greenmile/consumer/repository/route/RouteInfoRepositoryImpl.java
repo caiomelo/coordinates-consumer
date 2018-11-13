@@ -1,6 +1,6 @@
 package com.greenmile.consumer.repository.route;
 
-import com.greenmile.consumer.model.RouteInfo;
+import com.greenmile.consumer.model.route.RouteInfo;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

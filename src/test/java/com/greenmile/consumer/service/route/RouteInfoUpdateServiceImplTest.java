@@ -1,9 +1,9 @@
 package com.greenmile.consumer.service.route;
 
-import com.greenmile.consumer.model.PlannedStop;
-import com.greenmile.consumer.model.RouteInfo;
-import com.greenmile.consumer.model.RouteStatus;
-import com.greenmile.consumer.model.RouteUpdate;
+import com.greenmile.consumer.model.route.PlannedStop;
+import com.greenmile.consumer.model.route.RouteInfo;
+import com.greenmile.consumer.model.route.RouteStatus;
+import com.greenmile.consumer.model.route.RouteUpdate;
 import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

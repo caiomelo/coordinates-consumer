@@ -1,6 +1,6 @@
 package com.greenmile.consumer.service.route;
 
-import com.greenmile.consumer.model.RouteUpdate;
+import com.greenmile.consumer.model.route.RouteUpdate;
 
 /**
  *

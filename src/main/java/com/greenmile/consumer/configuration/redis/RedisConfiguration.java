@@ -1,6 +1,6 @@
 package com.greenmile.consumer.configuration.redis;
 
-import com.greenmile.consumer.model.RouteInfo;
+import com.greenmile.consumer.model.route.RouteInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
