@@ -1,5 +1,6 @@
 package com.greenmile.consumer.repository.route;
 
+import com.greenmile.consumer.configuration.TestRedisConfiguration;
 import com.greenmile.consumer.model.route.PlannedStop;
 import com.greenmile.consumer.model.route.Route;
 import java.util.List;
@@ -18,7 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author caioalbmelo
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = {TestRedisConfiguration.class})
 public class RouteRepositoryTest {
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.greenmile.consumer.model.route;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author caioalbmelo
  */
 @Document(collection = "routes")
-public class Route {
+public class Route implements Serializable {
 
     @Id
     private String id;
