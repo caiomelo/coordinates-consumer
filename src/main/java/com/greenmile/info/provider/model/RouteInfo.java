@@ -1,14 +1,15 @@
 package com.greenmile.info.provider.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  *
  * @author caioalbmelo
  */
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY, content = JsonInclude.Include.NON_NULL)
 public class RouteInfo implements Serializable {
 
     private String id;
