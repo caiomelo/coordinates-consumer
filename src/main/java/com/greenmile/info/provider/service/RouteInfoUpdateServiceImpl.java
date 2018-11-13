@@ -23,30 +23,30 @@ public class RouteInfoUpdateServiceImpl implements RouteInfoUpdateService {
     @KafkaListener(topics = "route-status-update", containerFactory = "routeUpdateListenerContainerFactory")
     @Override
     public void receiveStatusUpdate(RouteUpdate update) {
-        RouteInfo found = routeInfoService.findOne(update.getId());
+        RouteInfo found = routeInfoService.findById(update.getId());
         if (found != null) {
             found.setStatus(update.getNewStatus());
-            routeInfoService.save(found);
+            routeInfoService.saveStatus(found);
         }
     }
 
     @KafkaListener(topics = "route-longest-stop-update", containerFactory = "routeUpdateListenerContainerFactory")
     @Override
     public void receiveLongestStopUpdate(RouteUpdate update) {
-        RouteInfo found = routeInfoService.findOne(update.getId());
+        RouteInfo found = routeInfoService.findById(update.getId());
         if (found != null) {
             found.setLongest(update.getLongest());
-            routeInfoService.save(found);
+            routeInfoService.saveLongestStop(found);
         }
     }
 
     @KafkaListener(topics = "route-new-stop-update", containerFactory = "routeUpdateListenerContainerFactory")
     @Override
     public void receiveNewStopUpdate(RouteUpdate update) {
-        RouteInfo found = routeInfoService.findOne(update.getId());
+        RouteInfo found = routeInfoService.findById(update.getId());
         if (found != null) {
             found.getExecutedStops().add(update.getNewStop());
-            routeInfoService.save(found);
+            routeInfoService.saveExecutedStop(found);
         }
     }
 

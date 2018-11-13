@@ -4,10 +4,10 @@ import com.greenmile.info.provider.model.PlannedStop;
 import com.greenmile.info.provider.model.RouteInfo;
 import com.greenmile.info.provider.model.RouteStatus;
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.Resource;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,16 +32,46 @@ public class RouteInfoRepositoryImplTest {
 
     @Before
     public void setUp() {
-        template.delete(RouteInfoRepository.ROUTE_INFO_KEY);
+        template.delete(RouteInfoRepository.ROUTES_STATUSES_KEY);
+        template.delete(RouteInfoRepository.ROUTES_STOPS_KEY);
+        template.delete(RouteInfoRepository.ROUTES_LONGEST_STOP_KEY);
     }
 
     @Test
-    public void testThatItCanSaveARouteInfo() {
+    public void testThatItCanSaveAStatusUpdateForARouteInfo() {
         RouteInfo info = createRouteInfo();
 
-        repository.save(info);
+        repository.saveStatus(info);
 
-        RouteInfo foundInfo = (RouteInfo) template.opsForHash().get(RouteInfoRepository.ROUTE_INFO_KEY, info.getId());
+        RouteInfo foundInfo = (RouteInfo) template.opsForHash().get(RouteInfoRepository.ROUTES_STATUSES_KEY, info.getId());
+        assertNotNull(foundInfo);
+        assertEquals(info.getId(), foundInfo.getId());
+        assertEquals(info.getStatus(), foundInfo.getStatus());
+        assertEquals(info.getExecutedStops().size(), foundInfo.getExecutedStops().size());
+        assertEquals(info.getLongest().getDescription(), foundInfo.getLongest().getDescription());
+    }
+
+    @Test
+    public void testThatItCanSaveAExecutedStopUpdateForARouteInfo() {
+        RouteInfo info = createRouteInfo();
+
+        repository.saveExecutedStop(info);
+
+        RouteInfo foundInfo = (RouteInfo) template.opsForHash().get(RouteInfoRepository.ROUTES_STOPS_KEY, info.getId());
+        assertNotNull(foundInfo);
+        assertEquals(info.getId(), foundInfo.getId());
+        assertEquals(info.getStatus(), foundInfo.getStatus());
+        assertEquals(info.getExecutedStops().size(), foundInfo.getExecutedStops().size());
+        assertEquals(info.getLongest().getDescription(), foundInfo.getLongest().getDescription());
+    }
+
+    @Test
+    public void testThatItCanSaveALongestStopUpdateForARouteInfo() {
+        RouteInfo info = createRouteInfo();
+
+        repository.saveLongestStop(info);
+
+        RouteInfo foundInfo = (RouteInfo) template.opsForHash().get(RouteInfoRepository.ROUTES_LONGEST_STOP_KEY, info.getId());
         assertNotNull(foundInfo);
         assertEquals(info.getId(), foundInfo.getId());
         assertEquals(info.getStatus(), foundInfo.getStatus());
@@ -52,28 +82,58 @@ public class RouteInfoRepositoryImplTest {
     @Test
     public void testThatItCanRetrieveARouteInfo() {
         RouteInfo info = createRouteInfo();
-        template.opsForHash().put(RouteInfoRepository.ROUTE_INFO_KEY, info.getId(), info);
+        template.opsForHash().put(RouteInfoRepository.ROUTES_STATUSES_KEY, info.getId(), info);
 
         RouteInfo found = repository.findById(info.getId());
         assertEquals(info.getId(), found.getId());
     }
 
     @Test
-    public void testThatItCanRetreiveAllRouteInfo() {
-        RouteInfo info1 = createRouteInfo();
-        RouteInfo info2 = createRouteInfo();
+    public void testThatItCanRetrieveTheStatusRelatedInfoOnly() {
+        RouteInfo statusInfo = createRouteInfo();
+        template.opsForHash().put(RouteInfoRepository.ROUTES_STATUSES_KEY, statusInfo.getId(), statusInfo);
 
-        template.opsForHash().put(RouteInfoRepository.ROUTE_INFO_KEY, info1.getId(), info1);
-        template.opsForHash().put(RouteInfoRepository.ROUTE_INFO_KEY, info2.getId(), info2);
+        RouteInfo longestStopInfo = createRouteInfo();
+        template.opsForHash().put(RouteInfoRepository.ROUTES_LONGEST_STOP_KEY, longestStopInfo.getId(), longestStopInfo);
 
-        List<RouteInfo> allFound = repository.findAll();
-        assertEquals(2, allFound.size());
+        RouteInfo executedStopsInfo = createRouteInfo();
+        template.opsForHash().put(RouteInfoRepository.ROUTES_STOPS_KEY, executedStopsInfo.getId(), executedStopsInfo);
 
-        for (RouteInfo info : allFound) {
-            if (!(info.getId().equals(info1.getId()) || info.getId().equals(info2.getId()))) {
-                fail("Route info not recognized");
-            }
-        }
+        List<RouteInfo> allFound = repository.getAllStatuses();
+        assertEquals(1, allFound.size());
+        assertEquals(statusInfo.getId(), allFound.get(0).getId());
+    }
+
+    @Test
+    public void testThatItCanRetrieveTheLongestStopRelatedInfoOnly() {
+        RouteInfo statusInfo = createRouteInfo();
+        template.opsForHash().put(RouteInfoRepository.ROUTES_STATUSES_KEY, statusInfo.getId(), statusInfo);
+
+        RouteInfo longestStopInfo = createRouteInfo();
+        template.opsForHash().put(RouteInfoRepository.ROUTES_LONGEST_STOP_KEY, longestStopInfo.getId(), longestStopInfo);
+
+        RouteInfo executedStopsInfo = createRouteInfo();
+        template.opsForHash().put(RouteInfoRepository.ROUTES_STOPS_KEY, executedStopsInfo.getId(), executedStopsInfo);
+
+        List<RouteInfo> allFound = repository.getAllLongestStops();
+        assertEquals(1, allFound.size());
+        assertEquals(longestStopInfo.getId(), allFound.get(0).getId());
+    }
+
+    @Test
+    public void testThatItCanRetrieveTheExecutedStopsRelatedInfoOnly() {
+        RouteInfo statusInfo = createRouteInfo();
+        template.opsForHash().put(RouteInfoRepository.ROUTES_STATUSES_KEY, statusInfo.getId(), statusInfo);
+
+        RouteInfo longestStopInfo = createRouteInfo();
+        template.opsForHash().put(RouteInfoRepository.ROUTES_LONGEST_STOP_KEY, longestStopInfo.getId(), longestStopInfo);
+
+        RouteInfo executedStopsInfo = createRouteInfo();
+        template.opsForHash().put(RouteInfoRepository.ROUTES_STOPS_KEY, executedStopsInfo.getId(), executedStopsInfo);
+
+        List<RouteInfo> allFound = repository.getAllExecutedStops();
+        assertEquals(1, allFound.size());
+        assertEquals(executedStopsInfo.getId(), allFound.get(0).getId());
     }
 
     private RouteInfo createRouteInfo() {
@@ -92,7 +152,9 @@ public class RouteInfoRepositoryImplTest {
         plannedStop3.setLongitude(38.471691);
         plannedStop3.setDescription("Shopping RioMar");
         plannedStop3.setDeliveryRadius(100);
+        
         RouteInfo info = new RouteInfo();
+        info.setId(UUID.randomUUID().toString());
         info.setStatus(RouteStatus.IN_PROGRESS);
         info.setLongest(plannedStop2);
         info.getExecutedStops().add(plannedStop1);

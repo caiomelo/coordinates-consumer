@@ -21,18 +21,37 @@ public class RouteInfoServiceImpl implements RouteInfoService {
     }
 
     @Override
-    public List<RouteInfo> findAll() {
-        return repository.findAll();
-    }
-
-    @Override
-    public RouteInfo findOne(String id) {
+    public RouteInfo findById(String id) {
         return repository.findById(id);
     }
 
     @Override
-    public void save(RouteInfo info) {
-        repository.save(info);
+    public void saveStatus(RouteInfo info) {
+        repository.saveStatus(info);
     }
 
+    @Override
+    public List<RouteInfo> getAllStatuses() {
+        return repository.getAllStatuses();
+    }
+
+    @Override
+    public void saveExecutedStop(RouteInfo info) {
+        repository.saveExecutedStop(info);
+    }
+
+    @Override
+    public List<RouteInfo> getAllExecutedStops() {
+        return repository.getAllExecutedStops();
+    }
+
+    @Override
+    public void saveLongestStop(RouteInfo info) {
+        repository.saveLongestStop(info);
+    }
+
+    @Override
+    public List<RouteInfo> getAllLongestStops() {
+        return repository.getAllLongestStops();
+    }
 }

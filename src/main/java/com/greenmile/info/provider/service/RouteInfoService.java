@@ -8,11 +8,18 @@ import java.util.List;
  * @author caioalbmelo
  */
 public interface RouteInfoService {
-    
-    List<RouteInfo> findAll();
-    
-    RouteInfo findOne(String id);
-    
-    void save(RouteInfo info);
-    
+
+    RouteInfo findById(String id);
+
+    void saveStatus(RouteInfo info);
+
+    List<RouteInfo> getAllStatuses();
+
+    void saveExecutedStop(RouteInfo info);
+
+    List<RouteInfo> getAllExecutedStops();
+
+    void saveLongestStop(RouteInfo info);
+
+    List<RouteInfo> getAllLongestStops();
 }

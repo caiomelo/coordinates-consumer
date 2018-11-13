@@ -4,7 +4,6 @@ import com.greenmile.info.provider.model.RouteInfo;
 import com.greenmile.info.provider.repository.RouteInfoRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,18 +27,36 @@ public class RouteInfoServiceImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        
+
         service = new RouteInfoServiceImpl();
         service.setRepository(repositoryMock);
     }
 
     @Test
-    public void testThatItDelegatesRepositoryWhenSavingRouteInfo() {
+    public void testThatItDelegatesRepositoryWhenSavingRouteStatusInfo() {
         RouteInfo info = new RouteInfo();
 
-        service.save(info);
+        service.saveStatus(info);
 
-        verify(repositoryMock, times(1)).save(info);
+        verify(repositoryMock, times(1)).saveStatus(info);
+    }
+
+    @Test
+    public void testThatItDelegatesRepositoryWhenSavingRouteLongestStopInfo() {
+        RouteInfo info = new RouteInfo();
+
+        service.saveLongestStop(info);
+
+        verify(repositoryMock, times(1)).saveLongestStop(info);
+    }
+
+    @Test
+    public void testThatItDelegatesRepositoryWhenSavingRouteExecutedStopsInfo() {
+        RouteInfo info = new RouteInfo();
+
+        service.saveExecutedStop(info);
+
+        verify(repositoryMock, times(1)).saveExecutedStop(info);
     }
 
     @Test
@@ -48,16 +65,34 @@ public class RouteInfoServiceImplTest {
 
         when(repositoryMock.findById(info.getId())).thenReturn(info);
 
-        assertEquals(info, service.findOne(info.getId()));
+        assertEquals(info, service.findById(info.getId()));
     }
 
     @Test
-    public void testThatItDelegatesRepositoryWhenRetrievingAllRoutesInfoAvailable() {
+    public void testThatItDelegatesRepositoryWhenRetrievingAllStatusRelatedRoutesInfo() {
         List<RouteInfo> allRoutesInfo = new ArrayList<>();
 
-        when(repositoryMock.findAll()).thenReturn(allRoutesInfo);
+        when(repositoryMock.getAllStatuses()).thenReturn(allRoutesInfo);
 
-        assertEquals(allRoutesInfo, service.findAll());
+        assertEquals(allRoutesInfo, service.getAllStatuses());
+    }
+
+    @Test
+    public void testThatItDelegatesRepositoryWhenRetrievingAllLongestStopsRelatedRoutesInfo() {
+        List<RouteInfo> allRoutesInfo = new ArrayList<>();
+
+        when(repositoryMock.getAllLongestStops()).thenReturn(allRoutesInfo);
+
+        assertEquals(allRoutesInfo, service.getAllLongestStops());
+    }
+
+    @Test
+    public void testThatItDelegatesRepositoryWhenRetrievingAllExecutedStopsRelatedRoutesInfo() {
+        List<RouteInfo> allRoutesInfo = new ArrayList<>();
+
+        when(repositoryMock.getAllExecutedStops()).thenReturn(allRoutesInfo);
+
+        assertEquals(allRoutesInfo, service.getAllExecutedStops());
     }
 
 }

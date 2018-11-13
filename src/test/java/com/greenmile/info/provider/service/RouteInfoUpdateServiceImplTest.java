@@ -43,7 +43,7 @@ public class RouteInfoUpdateServiceImplTest {
 
         service.receiveStatusUpdate(update);
 
-        verify(routeInfoServiceMock, never()).save(any(RouteInfo.class));
+        verify(routeInfoServiceMock, never()).saveStatus(any(RouteInfo.class));
     }
 
     @Test
@@ -55,11 +55,11 @@ public class RouteInfoUpdateServiceImplTest {
         RouteInfo info = new RouteInfo();
         assertEquals(RouteStatus.PENDING, info.getStatus());
 
-        when(routeInfoServiceMock.findOne(update.getId())).thenReturn(info);
+        when(routeInfoServiceMock.findById(update.getId())).thenReturn(info);
 
         service.receiveStatusUpdate(update);
 
-        verify(routeInfoServiceMock, times(1)).save(any(RouteInfo.class));
+        verify(routeInfoServiceMock, times(1)).saveStatus(any(RouteInfo.class));
 
         assertEquals(RouteStatus.IN_PROGRESS, info.getStatus());
     }
@@ -71,7 +71,7 @@ public class RouteInfoUpdateServiceImplTest {
 
         service.receiveLongestStopUpdate(update);
 
-        verify(routeInfoServiceMock, never()).save(any(RouteInfo.class));
+        verify(routeInfoServiceMock, never()).saveLongestStop(any(RouteInfo.class));
     }
 
     @Test
@@ -86,11 +86,11 @@ public class RouteInfoUpdateServiceImplTest {
         RouteInfo info = new RouteInfo();
         assertNull(info.getLongest());
 
-        when(routeInfoServiceMock.findOne(update.getId())).thenReturn(info);
+        when(routeInfoServiceMock.findById(update.getId())).thenReturn(info);
 
         service.receiveLongestStopUpdate(update);
 
-        verify(routeInfoServiceMock, times(1)).save(any(RouteInfo.class));
+        verify(routeInfoServiceMock, times(1)).saveLongestStop(any(RouteInfo.class));
 
         assertEquals(longest, info.getLongest());
     }
@@ -102,7 +102,7 @@ public class RouteInfoUpdateServiceImplTest {
 
         service.receiveNewStopUpdate(update);
 
-        verify(routeInfoServiceMock, never()).save(any(RouteInfo.class));
+        verify(routeInfoServiceMock, never()).saveExecutedStop(any(RouteInfo.class));
     }
 
     @Test
@@ -117,11 +117,11 @@ public class RouteInfoUpdateServiceImplTest {
         RouteInfo info = new RouteInfo();
         assertEquals(0, info.getExecutedStops().size());
 
-        when(routeInfoServiceMock.findOne(update.getId())).thenReturn(info);
+        when(routeInfoServiceMock.findById(update.getId())).thenReturn(info);
 
         service.receiveNewStopUpdate(update);
 
-        verify(routeInfoServiceMock, times(1)).save(any(RouteInfo.class));
+        verify(routeInfoServiceMock, times(1)).saveExecutedStop(any(RouteInfo.class));
 
         assertEquals(1, info.getExecutedStops().size());
         assertEquals(newStop, info.getExecutedStops().get(0));
