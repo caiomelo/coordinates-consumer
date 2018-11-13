@@ -1,13 +1,14 @@
 package com.greenmile.consumer.model.coordinates;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author caioalbmelo
  */
-public class VehicleCoordinates {
+public class VehicleCoordinates implements Serializable {
 
     private double latitude;
 

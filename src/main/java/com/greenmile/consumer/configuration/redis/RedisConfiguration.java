@@ -1,5 +1,6 @@
 package com.greenmile.consumer.configuration.redis;
 
+import com.greenmile.consumer.model.coordinates.VehicleCoordinates;
 import com.greenmile.consumer.model.route.RouteInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,11 +21,21 @@ public class RedisConfiguration {
     private LettuceConnectionFactory connFactory;
     
     @Bean(name = "routeInfoRedisTemplate")
-    public RedisTemplate<String, RouteInfo> notificationRedisTemplate() {
+    public RedisTemplate<String, RouteInfo> routeInfoRedisTemplate() {
         RedisTemplate<String, RouteInfo> redisTemplate = new RedisTemplate();
         redisTemplate.setConnectionFactory(connFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(RouteInfo.class));
+        redisTemplate.afterPropertiesSet();
+        return redisTemplate;
+    }
+    
+    @Bean(name = "coordinatesRedisTemplate")
+    public RedisTemplate<String, VehicleCoordinates> coordinatesRedisTemplate() {
+        RedisTemplate<String, VehicleCoordinates> redisTemplate = new RedisTemplate();
+        redisTemplate.setConnectionFactory(connFactory);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(VehicleCoordinates.class));
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
