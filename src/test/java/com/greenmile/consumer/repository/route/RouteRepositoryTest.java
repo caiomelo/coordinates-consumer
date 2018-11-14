@@ -138,22 +138,44 @@ public class RouteRepositoryTest {
 
         assertNotNull(template.findById(route.getId(), Route.class));
     }
-    
+
     @Test
     public void testThatItCanRetrieveARouteByItsVehicleId() {
         Route route1 = new Route();
         route1.setAssignedVehicle(UUID.randomUUID().toString());
-        
+
         Route route2 = new Route();
         route2.setAssignedVehicle(UUID.randomUUID().toString());
-        
+
         template.save(route1);
         template.save(route2);
-        
+
         Route foundRoute1 = repository.findByVehicleId(route1.getAssignedVehicle());
         assertEquals(route1.getId(), foundRoute1.getId());
-        
+
         Route foundRoute2 = repository.findByVehicleId(route2.getAssignedVehicle());
         assertEquals(route2.getId(), foundRoute2.getId());
+    }
+
+    @Test
+    public void testThatItCanRetrieveAllRoutes() {
+        Route route1 = new Route();
+        route1.setAssignedVehicle(UUID.randomUUID().toString());
+
+        Route route2 = new Route();
+        route2.setAssignedVehicle(UUID.randomUUID().toString());
+
+        template.save(route1);
+        template.save(route2);
+
+        List<Route> found = repository.findAll();
+        assertEquals(2, found.size());
+
+        for (Route route : found) {
+            if (!(route.getId().equals(route1.getId()) || route.getId().equals(route2.getId()))) {
+                fail("Unrecognized route");
+            }
+        }
+
     }
 }

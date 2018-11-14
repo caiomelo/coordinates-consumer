@@ -1,6 +1,10 @@
 package com.greenmile.consumer.model.route;
 
-import com.greenmile.consumer.model.coordinates.VehicleCoordinates;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.greenmile.consumer.model.Views.ExecutedStopsView;
+import com.greenmile.consumer.model.Views.LongestStopView;
+import com.greenmile.consumer.model.Views.RoutesView;
+import com.greenmile.consumer.model.Views.StatusesView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,20 +20,26 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "routes")
 public class Route implements Serializable {
 
+    @JsonView(RoutesView.class)
     @Id
     private String id;
 
+    @JsonView(RoutesView.class)
     @Indexed
     private String assignedVehicle;
 
+    @JsonView(RoutesView.class)
     private String routePlan;
 
     private List<PlannedStop> plannedStops;
 
+    @JsonView(ExecutedStopsView.class)
     private List<PlannedStop> executedStops;
 
+    @JsonView(StatusesView.class)
     private RouteStatus status = RouteStatus.PENDING;
 
+    @JsonView(LongestStopView.class)
     private PlannedStop longest;
 
     private boolean inAStop = false;

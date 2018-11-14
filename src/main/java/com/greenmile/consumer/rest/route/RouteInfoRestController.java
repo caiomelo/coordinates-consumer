@@ -1,7 +1,12 @@
 package com.greenmile.consumer.rest.route;
 
-import com.greenmile.consumer.model.route.RouteInfo;
-import com.greenmile.consumer.service.route.RouteInfoService;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.greenmile.consumer.model.Views.ExecutedStopsView;
+import com.greenmile.consumer.model.Views.LongestStopView;
+import com.greenmile.consumer.model.Views.RoutesView;
+import com.greenmile.consumer.model.Views.StatusesView;
+import com.greenmile.consumer.model.route.Route;
+import com.greenmile.consumer.service.route.RouteService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,33 +25,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/RoutesInfo")
 public class RouteInfoRestController {
 
-    private RouteInfoService routeInfoService;
+    private RouteService routeService;
 
     @Autowired
-    public void setRouteInfoService(RouteInfoService routeInfoService) {
-        this.routeInfoService = routeInfoService;
+    public void setRouteService(RouteService routeService) {
+        this.routeService = routeService;
     }
 
+    @JsonView(value = {RoutesView.class, StatusesView.class})
     @RequestMapping(value = "/All/Status", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, List<RouteInfo>>> statuses() {
-        List<RouteInfo> statuses = routeInfoService.getAllStatuses();
-        Map<String, List<RouteInfo>> body = new HashMap<>();
+    public ResponseEntity<Map<String, List<Route>>> statuses() {
+        List<Route> statuses = routeService.findAll();
+        Map<String, List<Route>> body = new HashMap<>();
         body.put("statuses", statuses);
         return new ResponseEntity(body, HttpStatus.OK);
     }
 
+    @JsonView(value = {RoutesView.class, LongestStopView.class})
     @RequestMapping(value = "/All/LongestStops", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, List<RouteInfo>>> longestStops() {
-        List<RouteInfo> longest = routeInfoService.getAllLongestStops();
-        Map<String, List<RouteInfo>> body = new HashMap<>();
+    public ResponseEntity<Map<String, List<Route>>> longestStops() {
+        List<Route> longest = routeService.findAll();
+        Map<String, List<Route>> body = new HashMap<>();
         body.put("longestStops", longest);
         return new ResponseEntity(body, HttpStatus.OK);
     }
 
+    @JsonView(value = {RoutesView.class, ExecutedStopsView.class})
     @RequestMapping(value = "/All/ExecutedStops", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, List<RouteInfo>>> executedStops() {
-        List<RouteInfo> executedStops = routeInfoService.getAllExecutedStops();
-        Map<String, List<RouteInfo>> body = new HashMap<>();
+    public ResponseEntity<Map<String, List<Route>>> executedStops() {
+        List<Route> executedStops = routeService.findAll();
+        Map<String, List<Route>> body = new HashMap<>();
         body.put("executedStops", executedStops);
         return new ResponseEntity(body, HttpStatus.OK);
     }

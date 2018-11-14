@@ -1,6 +1,7 @@
 package com.greenmile.consumer.repository.route;
 
 import com.greenmile.consumer.model.route.Route;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -23,5 +24,12 @@ public class RouteRepositoryImpl implements RouteRepositoryCustom {
     public Route findByVehicleId(String vehicleId) {
         return template.findOne(Query.query(Criteria.where("assignedVehicle").is(vehicleId)), Route.class);
     }
+
+    @Override
+    public List<Route> findAll() {
+        return template.findAll(Route.class);
+    }
+    
+    
 
 }

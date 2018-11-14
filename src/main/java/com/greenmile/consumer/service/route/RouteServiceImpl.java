@@ -2,6 +2,7 @@ package com.greenmile.consumer.service.route;
 
 import com.greenmile.consumer.model.route.Route;
 import com.greenmile.consumer.repository.route.RouteRepository;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,11 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public Route findByVehicleId(String vehicleId) {
         return repository.findByVehicleId(vehicleId);
+    }
+
+    @Override
+    public List<Route> findAll() {
+        return repository.findAll();
     }
 
 }
