@@ -30,4 +30,9 @@ public class RouteServiceImpl implements RouteService {
         return repository.save(route);
     }
 
+    @Override
+    public Route findByVehicleId(String vehicleId) {
+        return repository.findByVehicleId(vehicleId);
+    }
+
 }

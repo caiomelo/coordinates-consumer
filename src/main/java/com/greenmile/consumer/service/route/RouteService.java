@@ -13,4 +13,6 @@ public interface RouteService {
     
     Route save(Route route);
     
+    Route findByVehicleId(String vehicleId);
+    
 }

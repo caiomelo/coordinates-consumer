@@ -3,6 +3,7 @@ package com.greenmile.consumer.service.route;
 import com.greenmile.consumer.model.route.Route;
 import com.greenmile.consumer.repository.route.RouteRepository;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -48,6 +49,16 @@ public class RouteServiceImplTest {
         when(repositoryMock.findById(retrieved.getId())).thenReturn(optional);
 
         assertEquals(optional, service.findOne(retrieved.getId()));
+    }
+    
+    @Test
+    public void testThatItDelegatesRepositoryWhenRetrievingARouteByItsAssignedVehicleId() {
+        Route retrieved = new Route();
+        retrieved.setAssignedVehicle(UUID.randomUUID().toString());
+
+        when(repositoryMock.findByVehicleId(retrieved.getId())).thenReturn(retrieved);
+
+        assertEquals(retrieved, service.findOne(retrieved.getId()));
     }
     
 }
