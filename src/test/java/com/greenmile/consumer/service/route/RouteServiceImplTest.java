@@ -58,7 +58,7 @@ public class RouteServiceImplTest {
 
         when(repositoryMock.findByVehicleId(retrieved.getId())).thenReturn(retrieved);
 
-        assertEquals(retrieved, service.findOne(retrieved.getId()));
+        assertEquals(retrieved, service.findByVehicleId(retrieved.getId()));
     }
     
 }
