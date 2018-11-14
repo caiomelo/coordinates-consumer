@@ -32,7 +32,7 @@ public class RouteInfoRestController {
         this.routeService = routeService;
     }
 
-    @JsonView(value = {RoutesView.class, StatusesView.class})
+    @JsonView(StatusesView.class)
     @RequestMapping(value = "/All/Status", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<Route>>> statuses() {
         List<Route> statuses = routeService.findAll();
@@ -41,7 +41,7 @@ public class RouteInfoRestController {
         return new ResponseEntity(body, HttpStatus.OK);
     }
 
-    @JsonView(value = {RoutesView.class, LongestStopView.class})
+    @JsonView(LongestStopView.class)
     @RequestMapping(value = "/All/LongestStops", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<Route>>> longestStops() {
         List<Route> longest = routeService.findAll();
@@ -50,7 +50,7 @@ public class RouteInfoRestController {
         return new ResponseEntity(body, HttpStatus.OK);
     }
 
-    @JsonView(value = {RoutesView.class, ExecutedStopsView.class})
+    @JsonView(ExecutedStopsView.class)
     @RequestMapping(value = "/All/ExecutedStops", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<Route>>> executedStops() {
         List<Route> executedStops = routeService.findAll();
