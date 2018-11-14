@@ -32,8 +32,6 @@ public class Route implements Serializable {
 
     private PlannedStop longest;
 
-    private VehicleCoordinates lastCoordinates;
-
     private boolean inAStop = false;
 
     public Route() {
@@ -110,18 +108,10 @@ public class Route implements Serializable {
         this.inAStop = inAStop;
     }
 
-    public VehicleCoordinates getLastCoordinates() {
-        return lastCoordinates;
-    }
-
-    public void setLastCoordinates(VehicleCoordinates lastCoordinates) {
-        this.lastCoordinates = lastCoordinates;
-    }
-
     public boolean updateLongestStop() {
         boolean updated = false;
         PlannedStop lastExecutedStop = getExecutedStops().get(getExecutedStops().size() - 1);
-        if (lastExecutedStop.getDuration() > getLongest().getDuration()) {
+        if (getLongest() == null || lastExecutedStop.getDuration() > getLongest().getDuration()) {
             setLongest(lastExecutedStop);
             updated = true;
         }
