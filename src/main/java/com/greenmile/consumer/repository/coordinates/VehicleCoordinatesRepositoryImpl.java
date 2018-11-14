@@ -1,6 +1,7 @@
 package com.greenmile.consumer.repository.coordinates;
 
 import com.greenmile.consumer.model.coordinates.VehicleCoordinates;
+import com.greenmile.consumer.model.route.Route;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,8 +30,25 @@ public class VehicleCoordinatesRepositoryImpl implements VehicleCoordinatesRepos
     }
 
     @Override
+    public void add(Route route, VehicleCoordinates coordinate) {
+        add(coordinate);
+        Double score = Double.valueOf(coordinate.getInstant().getTime());
+        ops.add(buildRouteKey(route), coordinate, score);
+    }
+
+    @Override
     public Set<VehicleCoordinates> getAllUntil(long limit) {
         return ops.rangeByScore(COORDINATES_ZSET_KEY, 0, limit);
+    }
+
+    @Override
+    public String buildRouteKey(Route route) {
+        return COORDINATES_ZSET_KEY + ":" + route.getId();
+    }
+
+    @Override
+    public Set<VehicleCoordinates> getAllUntil(Route route, long limit) {
+        return ops.rangeByScore(buildRouteKey(route), 0, limit);
     }
 
 }

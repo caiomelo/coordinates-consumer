@@ -2,6 +2,7 @@ package com.greenmile.consumer.repository.coordinates;
 
 import com.greenmile.consumer.configuration.TestRedisConfiguration;
 import com.greenmile.consumer.model.coordinates.VehicleCoordinates;
+import com.greenmile.consumer.model.route.Route;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
@@ -115,5 +116,84 @@ public class VehicleCoordinatesRepositoryImplTest {
         assertEquals(coordinates2.getLatitude(), second.getLatitude(), 0);
         assertEquals(coordinates2.getLongitude(), second.getLongitude(), 0);
         assertEquals(coordinates2.getInstant(), second.getInstant());
+    }
+
+    @Test
+    public void testThatItCanStoreCoordinatesForASingleRoute() {
+        Route route = new Route();
+
+        VehicleCoordinates coordinates = new VehicleCoordinates();
+        coordinates.setInstant(new Date());
+        coordinates.setLatitude(Math.random());
+        coordinates.setLongitude(Math.random());
+        coordinates.setVehicleId(UUID.randomUUID().toString());
+
+        repository.add(route, coordinates);
+
+        ZSetOperations ops = template.opsForZSet();
+
+        assertEquals(1, ops.count(repository.buildRouteKey(route), 0, coordinates.getInstant().getTime()), 0);
+
+        Set<VehicleCoordinates> foundSet = ops.rangeByScore(VehicleCoordinatesRepository.COORDINATES_ZSET_KEY, 0,
+                coordinates.getInstant().getTime());
+
+        assertNotNull(foundSet);
+        assertEquals(1, foundSet.size());
+
+        VehicleCoordinates foundCoordinates = foundSet.iterator().next();
+        assertEquals(coordinates.getVehicleId(), foundCoordinates.getVehicleId());
+        assertEquals(coordinates.getLatitude(), foundCoordinates.getLatitude(), 0);
+        assertEquals(coordinates.getLongitude(), foundCoordinates.getLongitude(), 0);
+        assertEquals(coordinates.getInstant(), foundCoordinates.getInstant());
+    }
+
+    @Test
+    public void testThatItCanRetrieveCoordinatesUntilGivenDateForASingleRoute() {
+        VehicleCoordinates coordinates1 = new VehicleCoordinates();
+        coordinates1.setInstant(new Date());
+        coordinates1.setLatitude(Math.random());
+        coordinates1.setLongitude(Math.random());
+        coordinates1.setVehicleId(UUID.randomUUID().toString());
+
+        VehicleCoordinates coordinates2 = new VehicleCoordinates();
+        coordinates2.setInstant(new Date(new Date().getTime() + 1000));
+        coordinates2.setLatitude(Math.random());
+        coordinates2.setLongitude(Math.random());
+        coordinates2.setVehicleId(UUID.randomUUID().toString());
+
+        VehicleCoordinates coordinates3 = new VehicleCoordinates();
+        coordinates3.setInstant(new Date(new Date().getTime() + 100000000));
+        coordinates3.setLatitude(Math.random());
+        coordinates3.setLongitude(Math.random());
+        coordinates3.setVehicleId(UUID.randomUUID().toString());
+
+        Route route = new Route();
+
+        repository.add(route, coordinates1);
+        repository.add(route, coordinates2);
+        repository.add(route, coordinates3);
+
+        Set<VehicleCoordinates> coordinatesByRange = repository.getAllUntil(route, coordinates2.getInstant().getTime() + 2000);
+        assertEquals(2, coordinatesByRange.size());
+
+        Iterator<VehicleCoordinates> coordinatesIterator = coordinatesByRange.iterator();
+        VehicleCoordinates first = coordinatesIterator.next();
+        assertEquals(coordinates1.getVehicleId(), first.getVehicleId());
+        assertEquals(coordinates1.getLatitude(), first.getLatitude(), 0);
+        assertEquals(coordinates1.getLongitude(), first.getLongitude(), 0);
+        assertEquals(coordinates1.getInstant(), first.getInstant());
+
+        VehicleCoordinates second = coordinatesIterator.next();
+        assertEquals(coordinates2.getVehicleId(), second.getVehicleId());
+        assertEquals(coordinates2.getLatitude(), second.getLatitude(), 0);
+        assertEquals(coordinates2.getLongitude(), second.getLongitude(), 0);
+        assertEquals(coordinates2.getInstant(), second.getInstant());
+    }
+
+    @Test
+    public void testThatItBuildsCacheNameForRouteCoordinatesCorrectly() {
+        Route route = new Route();
+        String built = repository.buildRouteKey(route);
+        assertEquals(VehicleCoordinatesRepository.COORDINATES_ZSET_KEY + ":" + route.getId(), built);
     }
 }
