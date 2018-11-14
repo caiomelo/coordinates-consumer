@@ -36,12 +36,12 @@ public class HaversineTest {
     @Test
     public void testThatItCalculatesTheDistanceBetweenAPlannedStopAndACoordindateCorrectly() {
         PlannedStop plannedStop = new PlannedStop();
-        plannedStop.setLatitude(-3.740376);
-        plannedStop.setLongitude(-38.566944);
+        plannedStop.setLatitude(-3.762392);
+        plannedStop.setLongitude(-38.483516);
 
         VehicleCoordinates coordinates1 = new VehicleCoordinates();
-        coordinates1.setLatitude(-3.762392);
-        coordinates1.setLongitude(-38.483516);
+        coordinates1.setLatitude(-3.740376);
+        coordinates1.setLongitude(-38.566944);
 
         double distance = Haversine.distanceInMeters(plannedStop, coordinates1);
         assertEquals(9577, distance, 1);
