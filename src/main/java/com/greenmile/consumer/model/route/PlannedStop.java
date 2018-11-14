@@ -64,4 +64,14 @@ public class PlannedStop implements Serializable {
         this.finishedDate = finishedDate;
     }
 
+    public long getDuration() {
+        long duration = Long.MIN_VALUE;
+        if (getStartedDate() != null && getFinishedDate() != null) {
+            long finish = finishedDate.getTime();
+            long start = startedDate.getTime();
+            duration = finish - start;
+        }
+        return duration;
+    }
+
 }
