@@ -137,6 +137,23 @@ public class RouteRepositoryTest {
         assertEquals(plannedStop3.getDescription(), savedPlannedStops.get(2).getDescription());
 
         assertNotNull(template.findById(route.getId(), Route.class));
-
+    }
+    
+    @Test
+    public void testThatItCanRetrieveARouteByItsVehicleId() {
+        Route route1 = new Route();
+        route1.setAssignedVehicle(UUID.randomUUID().toString());
+        
+        Route route2 = new Route();
+        route2.setAssignedVehicle(UUID.randomUUID().toString());
+        
+        template.save(route1);
+        template.save(route2);
+        
+        Route foundRoute1 = repository.findByVehicleId(route1.getAssignedVehicle());
+        assertEquals(route1.getId(), foundRoute1.getId());
+        
+        Route foundRoute2 = repository.findByVehicleId(route2.getAssignedVehicle());
+        assertEquals(route2.getId(), foundRoute2.getId());
     }
 }
